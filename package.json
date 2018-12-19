@@ -1,6 +1,6 @@
 {
-  "name": "HFTool",
-  "version": "1.0.0",
+  "name": "hftools",
+  "version": "1.0.1",
   "description": "",
   "main": "./lib/index",
   "scripts": {

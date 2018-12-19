@@ -13,7 +13,7 @@
           "libraryDirectory": "es",
           "style": true
         },
-        "ant"
+        "antd"
     ],
     [
       "import",
