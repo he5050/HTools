@@ -1,3 +1,4 @@
+import baseComponent from "./middleware/base_component";
 import cryptoTool from "./utils/crypto_tool";
 import calendar from "./utils/calendar";
 import utils from "./utils/utils";
@@ -20,6 +21,7 @@ import HFUpload from "./components/upload";
 import NOPower from "./components/error";
 
 export {
+	baseComponent,
 	fetchPack,
 	proxy,
 	cryptoTool,
