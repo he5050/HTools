@@ -9,17 +9,14 @@
     [
       "import",
         {
-          "libraryName": "antd",
-          "libraryDirectory": "es",
-          "style": false
+          "libraryName": "antd"
         },
         "antd"
     ],
     [
       "import",
       {
-        "libraryName": "lodash ",
-        "camel2DashComponentName": false
+        "libraryName": "lodash "
       },
       "lodash"
     ]
