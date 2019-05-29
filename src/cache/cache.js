@@ -3,7 +3,7 @@ export default class Cache {
     this.cache = {};
   }
 
-  set(key, value, expire) {
+  setItem(key, value, expire) {
     this.cache[key] = {
       value: value,
       expire: expire,
@@ -11,7 +11,7 @@ export default class Cache {
     };
   }
 
-  get(key) {
+  getItem(key) {
     const cNode = this.cache[key];
     if (!cNode) {
       return null;
@@ -34,7 +34,7 @@ export default class Cache {
     return null;
   }
 
-  clearWithKey(key) {
+  remove(key) {
     delete this.cache[key];
   }
 
