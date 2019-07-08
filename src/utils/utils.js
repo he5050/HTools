@@ -51,7 +51,7 @@ const utils = {
     if (url) {
       return (url + "?" + myURL.substr(1)).replace(" ", "");
     } else {
-      return (myURL.substr(1)).replace(" ", "");
+      return myURL.substr(1).replace(" ", "");
     }
   },
   /**
@@ -62,17 +62,13 @@ const utils = {
   parseQueryString(link) {
     let url = decodeURIComponent(link);
     let search =
-      url[0] === "?" ?
-      url.substr(1) :
-      url.substring(url.lastIndexOf("?") + 1);
+      url[0] === "?" ? url.substr(1) : url.substring(url.lastIndexOf("?") + 1);
     if (search === "") return {};
     search = search.split("&");
     let query = {};
     for (let i = 0; i < search.length; i++) {
       let pair = search[i].split("=");
-      query[decodeURIComponent(pair[0])] = decodeURIComponent(
-        pair[1] || ""
-      );
+      query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || "");
     }
     return query;
   },
@@ -84,14 +80,14 @@ const utils = {
   digitUppercase(n) {
     const fraction = ["角", "分"];
     const digit = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"];
-    const unit = [
-      ["元", "万", "亿"],
-      ["", "拾", "佰", "仟"]
-    ];
+    const unit = [["元", "万", "亿"], ["", "拾", "佰", "仟"]];
     let num = Math.abs(n);
     let s = "";
     fraction.forEach((item, index) => {
-      s += (digit[Math.floor(num * 10 * (10 ** index)) % 10] + item).replace(/零./, "");
+      s += (digit[Math.floor(num * 10 * 10 ** index) % 10] + item).replace(
+        /零./,
+        ""
+      );
     });
     s = s || "整";
     num = Math.floor(num);
@@ -103,7 +99,10 @@ const utils = {
       }
       s = p.replace(/(零.)*零$/, "").replace(/^$/, "零") + unit[0][i] + s;
     }
-    return s.replace(/(零.)*零元/, "元").replace(/(零.)+/g, "零").replace(/^整$/, "零元整");
+    return s
+      .replace(/(零.)*零元/, "元")
+      .replace(/(零.)+/g, "零")
+      .replace(/^整$/, "零元整");
   },
 
   /**
@@ -139,8 +138,8 @@ const utils = {
       } else {
         day -= 1;
       }
-      const beginTime = now.getTime() - (day * oneDay);
-      return [moment(beginTime), moment(beginTime + ((7 * oneDay) - 1000))];
+      const beginTime = now.getTime() - day * oneDay;
+      return [moment(beginTime), moment(beginTime + (7 * oneDay - 1000))];
     }
 
     if (type === "month") {
@@ -149,12 +148,22 @@ const utils = {
       const nextDate = moment(now).add(1, "months");
       const nextYear = nextDate.year();
       const nextMonth = nextDate.month();
-      return [moment(`${year}-${fixedZero(month + 1)}-01 00:00:00`), moment(moment(`${nextYear}-${fixedZero(nextMonth + 1)}-01 00:00:00`).valueOf() - 1000)];
+      return [
+        moment(`${year}-${fixedZero(month + 1)}-01 00:00:00`),
+        moment(
+          moment(
+            `${nextYear}-${fixedZero(nextMonth + 1)}-01 00:00:00`
+          ).valueOf() - 1000
+        )
+      ];
     }
 
     if (type === "year") {
       const year = now.getFullYear();
-      return [moment(`${year}-01-01 00:00:00`), moment(`${year}-12-31 23:59:59`)];
+      return [
+        moment(`${year}-01-01 00:00:00`),
+        moment(`${year}-12-31 23:59:59`)
+      ];
     }
   },
 
@@ -167,21 +176,29 @@ const utils = {
     let sys = {};
     let ua = navigator.userAgent.toLowerCase();
     let s;
-    (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1] :
-      (s = ua.match(/msie ([\d\.]+)/)) ? sys.ie = s[1] :
-      (s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1] :
-      (s = ua.match(/firefox\/([\d\.]+)/)) ? sys.firefox = s[1] :
-      (s = ua.match(/(?:opera|opr).([\d\.]+)/)) ? sys.opera = s[1] :
-      (s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1] :
-      (s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1] : 0;
+    (s = ua.match(/rv:([\d.]+)\) like gecko/))
+      ? (sys.ie = s[1])
+      : (s = ua.match(/msie ([\d\.]+)/))
+      ? (sys.ie = s[1])
+      : (s = ua.match(/edge\/([\d\.]+)/))
+      ? (sys.edge = s[1])
+      : (s = ua.match(/firefox\/([\d\.]+)/))
+      ? (sys.firefox = s[1])
+      : (s = ua.match(/(?:opera|opr).([\d\.]+)/))
+      ? (sys.opera = s[1])
+      : (s = ua.match(/chrome\/([\d\.]+)/))
+      ? (sys.chrome = s[1])
+      : (s = ua.match(/version\/([\d\.]+).*safari/))
+      ? (sys.safari = s[1])
+      : 0;
 
     // 根据关系进行判断
-    if (sys.ie) return ("IE: " + sys.ie);
-    if (sys.edge) return ("EDGE: " + sys.edge);
-    if (sys.firefox) return ("Firefox: " + sys.firefox);
-    if (sys.chrome) return ("Chrome: " + sys.chrome);
-    if (sys.opera) return ("Opera: " + sys.opera);
-    if (sys.safari) return ("Safari: " + sys.safari);
+    if (sys.ie) return "IE: " + sys.ie;
+    if (sys.edge) return "EDGE: " + sys.edge;
+    if (sys.firefox) return "Firefox: " + sys.firefox;
+    if (sys.chrome) return "Chrome: " + sys.chrome;
+    if (sys.opera) return "Opera: " + sys.opera;
+    if (sys.safari) return "Safari: " + sys.safari;
 
     return "Unkonwn";
   },
@@ -192,15 +209,31 @@ const utils = {
    * @return {String}
    */
   getOS() {
-    let userAgent = "navigator" in window && "userAgent" in navigator && navigator.userAgent.toLowerCase() || "";
-    let appVersion = "navigator" in window && "appVersion" in navigator && navigator.appVersion.toLowerCase() || "";
+    let userAgent =
+      ("navigator" in window &&
+        "userAgent" in navigator &&
+        navigator.userAgent.toLowerCase()) ||
+      "";
+    let appVersion =
+      ("navigator" in window &&
+        "appVersion" in navigator &&
+        navigator.appVersion.toLowerCase()) ||
+      "";
 
     if (/mac/i.test(appVersion)) return "MacOSX";
     if (/win/i.test(appVersion)) return "windows";
     if (/linux/i.test(appVersion)) return "linux";
-    if (/iphone/i.test(userAgent) || /ipad/i.test(userAgent) || /ipod/i.test(userAgent)) "ios";
+    if (
+      /iphone/i.test(userAgent) ||
+      /ipad/i.test(userAgent) ||
+      /ipod/i.test(userAgent)
+    ) {
+      ("ios");
+    }
     if (/android/i.test(userAgent)) return "android";
-    if (/win/i.test(appVersion) && /phone/i.test(userAgent)) return "windowsPhone";
+    if (/win/i.test(appVersion) && /phone/i.test(userAgent)) {
+      return "windowsPhone";
+    }
   },
   /**
    * 用于把用utf16编码的字符转换成实体字符，以供后台存储
@@ -209,14 +242,12 @@ const utils = {
    */
   utf16toEntities(str) {
     let patt = /[\ud800-\udbff][\udc00-\udfff]/g; // 检测utf16字符正则
-    str = str.replace(patt, function (char) {
-      let H,
-        L,
-        code;
+    str = str.replace(patt, function(char) {
+      let H, L, code;
       if (char.length === 2) {
         H = char.charCodeAt(0); // 取出高位
         L = char.charCodeAt(1); // 取出低位
-        code = (H - 0xD800) * 0x400 + 0x10000 + L - 0xDC00; // 转换算法
+        code = (H - 0xd800) * 0x400 + 0x10000 + L - 0xdc00; // 转换算法
         return "&#" + code + ";";
       } else {
         return char;
@@ -240,9 +271,9 @@ const utils = {
       code = arr[i];
       code = code.replace("&#", "").replace(";", "");
       // 高位
-      H = Math.floor((code - 0x10000) / 0x400) + 0xD800;
+      H = Math.floor((code - 0x10000) / 0x400) + 0xd800;
       // 低位
-      L = (code - 0x10000) % 0x400 + 0xDC00;
+      L = ((code - 0x10000) % 0x400) + 0xdc00;
       code = "&#" + code + ";";
       let s = String.fromCharCode(H, L);
       strObj = strObj.replace(code, s);
@@ -255,7 +286,9 @@ const utils = {
    * @return {string}     返回新生成的字符串
    */
   randomString(length) {
-    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".split("");
+    const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".split(
+      ""
+    );
     if (!length) {
       length = Math.floor(Math.random() * chars.length);
     }
@@ -267,45 +300,45 @@ const utils = {
   },
   promiseHandle(API) {
     if (typeof API === "function") {
-        return (options, ...params) => {
-            return new Promise((resolve, reject) => {
-                API(
-                    Object.assign({}, options, {
-                        success: resolve,
-                        fail: reject
-                    }),
-                    ...params
-                );
-                // 这是es7中的属性，用于处理最终状态
-                Promise.prototype.finally = function (callback) {
-                    let P = this.constructor;
-                    return this.then(
-                        value => P.resolve(callback()).then(() => value),
-                        error =>
-                        P.resolve(callback()).then(() => {
-                            throw error;
-                        })
-                    );
-                };
-            });
-        };
+      return (options, ...params) => {
+        return new Promise((resolve, reject) => {
+          API(
+            Object.assign({}, options, {
+              success: resolve,
+              fail: reject
+            }),
+            ...params
+          );
+          // 这是es7中的属性，用于处理最终状态
+          Promise.prototype.finally = function(callback) {
+            let P = this.constructor;
+            return this.then(
+              value => P.resolve(callback()).then(() => value),
+              error =>
+                P.resolve(callback()).then(() => {
+                  throw error;
+                })
+            );
+          };
+        });
+      };
     }
-},
-pHandle(fn) {
-  return (obj = {}) => {
+  },
+  pHandle(fn) {
+    return (obj = {}) => {
       return new Promise((resolve, reject) => {
-          obj.success = res => {
-              resolve(res);
-          };
+        obj.success = res => {
+          resolve(res);
+        };
 
-          obj.fail = res => {
-              reject(res);
-          };
+        obj.fail = res => {
+          reject(res);
+        };
 
-          fn(obj);
+        fn(obj);
       });
-  };
-}
+    };
+  }
 };
 
 export default utils;

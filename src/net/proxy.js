@@ -83,23 +83,25 @@ export default class Proxy {
       // 设置请求超时30秒
       req.setTimeout(30000);
 
-      req.on("error", e => {
-        if (req.res && req.res.abort && (typeof req.res.abort === "function")) {
-          req.res.abort();
-        }
-        req.abort();
-        data.msg = "服务器错误";
-        data.code = 404;
-        resolve(data);
-      }).on("timeout", e => {
-        if (req.res && req.res.abort && (typeof req.res.abort === "function")) {
-          req.res.abort();
-        }
-        req.abort();
-        data.msg = "request timeout";
-        data.code = 404;
-        resolve(data);
-      });
+      req
+        .on("error", e => {
+          if (req.res && req.res.abort && typeof req.res.abort === "function") {
+            req.res.abort();
+          }
+          req.abort();
+          data.msg = "服务器错误";
+          data.code = 404;
+          resolve(data);
+        })
+        .on("timeout", e => {
+          if (req.res && req.res.abort && typeof req.res.abort === "function") {
+            req.res.abort();
+          }
+          req.abort();
+          data.msg = "request timeout";
+          data.code = 404;
+          resolve(data);
+        });
 
       req.write(bodyString);
       req.end();
@@ -185,23 +187,25 @@ export default class Proxy {
       // 设置请求超时30秒
       req.setTimeout(30000);
 
-      req.on("error", e => {
-        if (req.res && req.res.abort && (typeof req.res.abort === "function")) {
-          req.res.abort();
-        }
-        req.abort();
-        data.msg = "服务器错误";
-        data.code = 404;
-        resolve(data);
-      }).on("timeout", e => {
-        if (req.res && req.res.abort && (typeof req.res.abort === "function")) {
-          req.res.abort();
-        }
-        req.abort();
-        data.msg = "request timeout";
-        data.code = 404;
-        resolve(data);
-      });
+      req
+        .on("error", e => {
+          if (req.res && req.res.abort && typeof req.res.abort === "function") {
+            req.res.abort();
+          }
+          req.abort();
+          data.msg = "服务器错误";
+          data.code = 404;
+          resolve(data);
+        })
+        .on("timeout", e => {
+          if (req.res && req.res.abort && typeof req.res.abort === "function") {
+            req.res.abort();
+          }
+          req.abort();
+          data.msg = "request timeout";
+          data.code = 404;
+          resolve(data);
+        });
 
       req.end();
     });

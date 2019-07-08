@@ -1,31 +1,53 @@
 import fetch from "isomorphic-fetch";
 
-class FetchPack {
-  constructor() {
+export class FetchPack {
+  constructor(config = {}) {
     let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
+    headers.append("Content-Type", "application/json");
 
     this.requestInit = {
       headers,
-      // include:表示可以跨域传递cookie same-origin:表示只能同源传递cookie
-      credentials: 'same-origin',
-      mode: 'cors',
-      cache: 'default',
+      credentials: "same-origin", // include:表示可以跨域传递cookie same-origin:表示只能同源传递cookie *omit
+      redirect: "follow", // manual, *follow, error
+      referrer: "no-referrer", // client, no-referrer
+      mode: "cors", // no-cors, cors, *same-origin
+      cache: "default", // default, no-cache, reload, force-cache, only-if-cached
+      ...config
     };
   }
 
+  async put(url, body) {
+    let respData = {};
+
+    try {
+      let resp = await fetch(url, {
+        ...this.requestInit,
+        method: "put",
+        body: body
+      });
+      respData = await resp.json();
+
+      // 判断是否有重定向
+      if (respData.code === 302) {
+        window.location.href = respData.data[0];
+      }
+    } catch (err) {
+      console.log(err);
+      respData.succ = false;
+      respData.msg = `网络请求异常`;
+    }
+
+    return respData;
+  }
   async post(url, body) {
     let respData = {};
 
     try {
-      let resp = await fetch(
-        url,
-        {
-          ...this.requestInit,
-          method: 'post',
-          body: JSON.stringify(body),
-        }
-      );
+      let resp = await fetch(url, {
+        ...this.requestInit,
+        method: "post",
+        body: JSON.stringify(body)
+      });
       respData = await resp.json();
 
       // 判断是否有重定向
@@ -45,13 +67,10 @@ class FetchPack {
     let respData = {};
 
     try {
-      let resp = await fetch(
-        url,
-        {
-          ...this.requestInit,
-          method: 'get',
-        }
-      );
+      let resp = await fetch(url, {
+        ...this.requestInit,
+        method: "get"
+      });
       respData = await resp.json();
 
       // 判断是否有重定向
