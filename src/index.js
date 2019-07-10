@@ -7,6 +7,7 @@ import utils from "./utils/utils";
 import validation from "./utils/validation";
 import decorator from "./utils/decorator";
 import encrypt from "./utils/encrypt";
+import eventHub from "./utils/hub";
 import { eventLock, eventLockDely } from "./utils/lock";
 import { typeColor, capsuleLog } from "./utils/myLog";
 import { idValidator, idValidatorGB } from "./utils/idValidator";
@@ -31,6 +32,7 @@ import NOPower from "./components/error";
 export const event = new EE();
 export const tools = _;
 export {
+  eventHub,
   idValidator,
   idValidatorGB,
   typeColor,
